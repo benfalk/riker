@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'parameter/default_value'
+
 module Riker
   # Single Command Parameter
   #
@@ -7,11 +9,20 @@ module Riker
     # @return [Symbol]
     attr_reader :name
 
+    # @return [DefaultValue]
+    attr_reader :default
+
     # @param name [Symbol]
     # @param required [Boolean]
-    def initialize(name, required: true)
+    # @param default [Object, Proc]
+    def initialize(
+      name,
+      required: true,
+      default: DefaultValue.no_value
+    )
       @name = name
       @required = required
+      @default = DefaultValue.new(name, default)
     end
 
     # @return [Boolean]
@@ -32,6 +43,7 @@ module Riker
     private
 
     def fallback_default
+      return default.function_name if default.present?
       return if required?
 
       'nil'

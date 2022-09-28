@@ -7,7 +7,7 @@ module Riker
   # track of the build of a command in your application
   #
   class Command
-    # @return [Riker::Parameters]
+    # @return [Riker::CommandParameters]
     attr_reader :parameters
 
     # @return [Proc, nil]
@@ -20,6 +20,7 @@ module Riker
     # @param klass [Class]
     def build!(klass)
       klass.define_method(:execute, &execute_block)
+      define_default_setters!(klass)
       define_init!(klass)
       define_run_bang!(klass)
       define_attr_readers!(klass)
@@ -49,6 +50,13 @@ module Riker
     # @param klass [Class]
     def define_attr_readers!(klass)
       klass.attr_reader(*parameters.map(&:name))
+    end
+
+    # @param klass [Class]
+    def define_default_setters!(klass)
+      parameters.each do |param|
+        param.default.build_default_function!(klass)
+      end
     end
   end
 end
