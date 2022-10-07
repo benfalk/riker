@@ -3,7 +3,6 @@
 require_relative 'riker/version'
 require_relative 'riker/error'
 require_relative 'riker/command'
-require_relative 'riker/command_parameters'
 require_relative 'riker/parameter'
 
 # The Commander of the USS Enterprise
@@ -26,6 +25,6 @@ module Riker
     raise Error, "execute block already called for #{self}!" if command.execute_block
 
     command.execute_block = block
-    command.build!(self)
+    command.function_writer.write!(self)
   end
 end

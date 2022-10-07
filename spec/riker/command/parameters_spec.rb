@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-RSpec.describe Riker::CommandParameters do
+RSpec.describe Riker::Command::Parameters do
   let(:instance) { described_class.new }
 
   describe '#add' do

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'command/parameters'
+require_relative 'command/function'
+require_relative 'command/function_details'
+require_relative 'command/function_writer'
+
 module Riker
   # Command Builder
   #
@@ -7,56 +12,18 @@ module Riker
   # track of the build of a command in your application
   #
   class Command
-    # @return [Riker::CommandParameters]
+    # @return [Riker::Command::Parameters]
     attr_reader :parameters
+
+    # @return [Riker::Command::FunctionWriter]
+    attr_reader :function_writer
 
     # @return [Proc, nil]
     attr_accessor :execute_block
 
     def initialize
-      @parameters = CommandParameters.new
-    end
-
-    # @param klass [Class]
-    def build!(klass)
-      klass.define_method(:execute, &execute_block)
-      define_default_setters!(klass)
-      define_init!(klass)
-      define_run_bang!(klass)
-      define_attr_readers!(klass)
-    end
-
-    private
-
-    # @param klass [Class]
-    def define_init!(klass)
-      klass.class_eval(<<~RUBY, __FILE__, __LINE__ + 1)
-        def initialize(#{parameters.ctor_args})  # def initialize(foo:)
-          #{parameters.variable_sets}            #   @foo = foo
-        end                                      # end
-      RUBY
-    end
-
-    # @param klass [Class]
-    def define_run_bang!(klass)
-      klass.class_eval(<<~RUBY, __FILE__, __LINE__ + 1)
-        def self.run!(**arguments)    # def initialize(**arguments)
-          command = new(**arguments)  #   command = new(**arguments)
-          command.execute             #   command.execute
-        end                           # end
-      RUBY
-    end
-
-    # @param klass [Class]
-    def define_attr_readers!(klass)
-      klass.attr_reader(*parameters.map(&:name))
-    end
-
-    # @param klass [Class]
-    def define_default_setters!(klass)
-      parameters.each do |param|
-        param.default.build_default_function!(klass)
-      end
+      @parameters = Parameters.new
+      @function_writer = FunctionWriter.new(self)
     end
   end
 end

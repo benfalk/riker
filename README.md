@@ -12,7 +12,7 @@ High-Performance, Dependency-Free Command Pattern For Ruby
 ### In your gemfile:
 
 ```ruby
-gem 'riker', '0.1.0.pre3'
+gem 'riker', '0.1.0.pre4'
 ```
 
 ### In your code:
