@@ -7,6 +7,12 @@ RSpec.describe Riker::Command::Parameters do
     it 'returns itself after an add' do
       expect(instance.add(:foo)).to eq(instance)
     end
+
+    it 'raises an exception for a reserved attribute name' do
+      expect { instance.add(:errors) }.to raise_error(
+        Riker::Command::Parameters::ReservedAttributeName
+      )
+    end
   end
 
   context 'with `foo` and an optional `bar`' do

@@ -12,6 +12,11 @@ module Riker
       include Enumerable
       class ParamNameTaken < ::Riker::Error; end
       class InvalidParamName < ::Riker::Error; end
+      class ReservedAttributeName < ::Riker::Error; end
+
+      RESERVED_ATTR_NAMES = %i[
+        errors
+      ].to_set.freeze
 
       def initialize
         # @var [Hash<Symbol, Parameter>]
@@ -47,6 +52,7 @@ module Riker
 
       def validate_name!(name)
         raise InvalidParamName unless name.is_a?(Symbol)
+        raise ReservedAttributeName if RESERVED_ATTR_NAMES.include?(name)
         raise ParamNameTaken if @params.key?(name)
       end
     end

@@ -12,7 +12,7 @@ High-Performance, Dependency-Free Command Pattern For Ruby
 ### In your gemfile:
 
 ```ruby
-gem 'riker', '0.1.0.pre4'
+gem 'riker', '0.1.0.pre5'
 ```
 
 ### In your code:
@@ -26,6 +26,11 @@ class SimpleGreeting
   param :punctuation, default: '.'
 
   execute do
+    if first_name == 'Voldemort'
+      errors.add(:first_name, 'He who shall not be named!')
+      return
+    end
+
     return "Hello #{first_name}#{punctuation}" if last_name.nil?
 
     "Hello #{first_name} #{last_name}#{punctuation}"
@@ -44,6 +49,24 @@ SimpleGreeting.run!(first_name: 'Will', last_name: 'Riker')
 
 SimpleGreeting.run!(first_name: 'Will', last_name: 'Riker', punctuation: '!')
 # => "Hello Will Riker!"
+
+SimpleGreeting.run!(first_name: 'Voldemort')
+# => Riker::Outcome::ExecutionError => e
+# =>   e.errors.messages == ['He who shall not be named!']
+
+outcome = SimpleGreeting.run(first_name: 'Will')
+outcome.valid?
+# => true
+outcome.result
+# => "Hello Will."
+
+outcome = SimpleGreeting.run(first_name: 'Voldemort')
+outcome.invalid?
+# => true
+outcome.result
+# => nil
+outcome.errors.messages
+# => ['He who shall not be named!']
 ```
 
 ## Default Procs

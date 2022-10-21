@@ -2,6 +2,7 @@
 
 require_relative 'run_bang_function'
 require_relative 'initialize_function'
+require_relative 'run_function'
 
 module Riker
   class Command
@@ -13,7 +14,12 @@ module Riker
     class FunctionWriter
       DEFAULT_FUNCTIONS = [
         RunBangFunction,
+        RunFunction,
         InitializeFunction
+      ].freeze
+
+      INSTANCE_METHOD_MODULES = [
+        FallibleMethods
       ].freeze
 
       # @return [Riker::Command]
@@ -34,6 +40,7 @@ module Riker
         define_default_setters!(klass)
         define_attr_readers!(klass)
         write_functions!(klass)
+        include_instance_methods!(klass)
       end
 
       private
@@ -55,6 +62,13 @@ module Riker
       def define_default_setters!(klass)
         command.parameters.each do |param|
           param.default.build_default_function!(klass)
+        end
+      end
+
+      # @param klass [Class]
+      def include_instance_methods!(klass)
+        INSTANCE_METHOD_MODULES.each do |mod|
+          klass.include(mod)
         end
       end
     end

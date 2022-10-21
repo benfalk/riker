@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
+require 'forwardable'
+require 'set'
+
 require_relative 'riker/version'
 require_relative 'riker/error'
 require_relative 'riker/command'
 require_relative 'riker/parameter'
+require_relative 'riker/outcome'
 
 # The Commander of the USS Enterprise
 module Riker

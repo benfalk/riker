@@ -15,10 +15,14 @@ module Riker
       # @return [Riker::Command::FunctionDetails]
       def details
         FunctionDetails.new(<<~RUBY, __FILE__, __LINE__ + 1)
-          def self.run!(**arguments)    # def initialize(**arguments)
-            command = new(**arguments)  #   command = new(**arguments)
-            command.execute             #   command.execute
-          end                           # end
+          def self.run!(**arguments)          # def self.run!(**arguments)
+            command = new(**arguments)        #   command = new(**arguments)
+            result = command.execute          #   result = command.execute
+            if command.errored?               #   if command.errored?
+              command.errors.raise!           #     command.errors.raise!
+            end                               #   end
+            result                            #   result
+          end                                 # end
         RUBY
       end
     end
