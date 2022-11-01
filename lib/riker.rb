@@ -31,4 +31,11 @@ module Riker
     command.execute_block = block
     command.function_writer.write!(self)
   end
+
+  # @block the logic to run around a command
+  def around(&block)
+    raise Error, "around block already called for #{self}!" if command.around_block
+
+    command.around_block = block
+  end
 end

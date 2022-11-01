@@ -22,6 +22,9 @@ module Riker
     # @return [Proc, nil]
     attr_accessor :execute_block
 
+    # @return [Proc, nil]
+    attr_accessor :around_block
+
     def initialize
       @parameters = Parameters.new
       @function_writer = FunctionWriter.new(self)

@@ -12,7 +12,7 @@ High-Performance, Dependency-Free Command Pattern For Ruby
 ### In your gemfile:
 
 ```ruby
-gem 'riker', '0.1.0.pre5'
+gem 'riker', '0.1.0.pre6'
 ```
 
 ### In your code:
@@ -94,4 +94,40 @@ CaptainsLog.run!(message: "The Borg are attacking!")
 
 CaptainsLog.run(message: "We've traveled back in time!", stardate: 42.1337)
 # => "Captain's Log; Stardate: 42.1337\n\nWe've traveled back in time!"
+```
+
+## Measurement Code
+
+Sometimes you'll want to do some logic around your commands to record
+their performance, number of calls, etc.  Rike allows for this with `around`.
+The result of your measurement code in no way effects the result from
+the command.
+
+```ruby
+module SensorArray
+  class << self
+    # the class and args of the command are provided
+    def deep_scan(klass, args)
+      # anything before code runs
+
+      # code runs here
+      yield
+
+      # anything after you want
+    end
+  end
+end
+
+class CheckWarpDrive
+  extend Riker
+
+  param :stardate
+  param :engineer
+
+  around &SensorArray.method(:deep_scan)
+
+  execute do
+    "WarpDrive checked by #{engineer} on #{stardate}"
+  end
+end
 ```
