@@ -3,6 +3,8 @@
 require_relative 'run_bang_function'
 require_relative 'initialize_function'
 require_relative 'run_function'
+require_relative 'params_method'
+require_relative 'fallible_methods'
 
 module Riker
   class Command
@@ -19,7 +21,8 @@ module Riker
       ].freeze
 
       INSTANCE_METHOD_MODULES = [
-        FallibleMethods
+        FallibleMethods,
+        ParamsMethod
       ].freeze
 
       # @return [Riker::Command]

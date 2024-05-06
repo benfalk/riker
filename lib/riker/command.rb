@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'command/parameters'
-require_relative 'command/fallible_methods'
 require_relative 'command/function'
 require_relative 'command/function_details'
 require_relative 'command/function_writer'
