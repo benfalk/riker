@@ -16,6 +16,7 @@ module Riker
 
       RESERVED_ATTR_NAMES = %i[
         errors
+        params
       ].to_set.freeze
 
       def initialize
