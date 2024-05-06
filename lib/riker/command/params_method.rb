@@ -12,9 +12,8 @@ module Riker
       # This is helpful when needing to proxy params or for logging.
       # @return [Hash]
       def params
-        self.class.command.parameters.reduce({}) do |acc, cur|
+        self.class.command.parameters.each_with_object({}) do |cur, acc|
           acc[cur.name] = send(cur.name)
-          acc
         end
       end
     end
